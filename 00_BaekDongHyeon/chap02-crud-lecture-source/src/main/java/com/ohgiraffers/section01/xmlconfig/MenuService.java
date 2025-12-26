@@ -1,0 +1,74 @@
+package com.ohgiraffers.section01.xmlconfig;
+
+import org.apache.ibatis.session.SqlSession;
+
+import java.util.List;
+
+import static com.ohgiraffers.section01.xmlconfig.Template.getSqlSession;
+
+/* Service 계층
+ * - 비즈니스 로직 처리 계층
+ * - 데이터 가공 또는 DAO(DB CRUD) 호출, 트랜잭션 관리
+ * */
+public class MenuService {
+
+  private final MenuDAO menuDAO;
+
+  public MenuService() {
+    this.menuDAO = new MenuDAO();
+  }
+
+  /**
+   * 전체 메뉴 조회
+   * @return menuList
+   */
+  public List<MenuDTO> selectAllMenu() {
+
+    // 1. SqlSession 얻어오기
+    SqlSession sqlSession = getSqlSession();
+
+    // 2. SQL 수행 후 결과 반환 받기
+    List<MenuDTO> menuList = menuDAO.selectAllMenu(sqlSession);
+
+    // 3. SqlSession 메모리 반환
+    sqlSession.close();
+
+    // 4. 결과 반환
+    return menuList;
+  }
+
+  /**
+   * 메뉴 코드가 일치하는 메뉴 조회
+   * @param menuCode
+   * @return menu
+   */
+  public MenuDTO selectMenuByMenuCode(int menuCode) {
+
+    SqlSession sqlSession = getSqlSession();
+
+    MenuDTO menu = menuDAO.selectMenuByMenuCode(sqlSession, menuCode);
+
+    sqlSession.close();
+
+    return menu;
+  }
+
+
+  public boolean registMenu(MenuDTO menu) {
+
+    return false;
+  }
+
+  /* 메소드명, id 등 : updateMenu */
+  public boolean modifyMenu(MenuDTO menu) {
+
+    return false;
+  }
+
+  /* 메소드명, id 등 : deleteMenu */
+  public boolean deleteMenu(int menuCode) {
+
+    return false;
+  }
+
+}

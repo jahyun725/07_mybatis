@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace(공간 이름) : sql을 묶어둔 mapper의 이름-->
+<mapper namespace="mapper">
+  <select id="selectDate" resultType="java.util.Date">
+    SELECT NOW()
+  </select>
+
+  <select id="selectMenuNameList" resultType="java.lang.String">
+    SELECT menu_name
+    FROM tbl_menu
+    ORDER BY menu_code ASC
+  </select>
+
+
+
+</mapper>

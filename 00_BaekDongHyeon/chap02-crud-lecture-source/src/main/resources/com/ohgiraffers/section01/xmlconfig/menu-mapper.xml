@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace(공간 이름) : sql을 묶어둔 mapper의 이름-->
+<mapper namespace="MenuMapper">
+
+  <!--
+    select 태그에 필수로 작성해야되는 속성
+    1) id
+    2) resultType 또는 resultMap
+     - resultType : 조회 결과를 저장할 java 타입
+       만약 지정된 타입이 DTO 객체일 경우
+       조회된 컬럼명과 DTO 필드명이 같으면 자동으로 대입된다
+
+     - resultMap : 조회된 컬럼명이 DTO 필드와 맞지 않을 경우
+       이를 알맞게 매핑 시켜주는 태그
+  -->
+  <resultMap id="menuResultMap" type="com.ohgiraffers.section01.xmlconfig.MenuDTO">
+
+    <!-- id : pk에 해당하는 컬럼을 작성 -->
+    <id property="menuCode" column="menu_code"/>
+
+    <!-- result : pk 외의 일반 컬럼을 작성 -->
+    <result property="menuName" column="menu_name"/>
+    <result property="menuPrice" column="menu_price"/>
+    <result property="categoryCode" column="category_code"/>
+    <result property="orderableStatus" column="orderable_status"/>
+  </resultMap>
+
+
+
+  <select id="selectAllMenu" resultMap="menuResultMap">
+    SELECT
+      menu_code,
+      menu_name,
+      menu_price,
+      category_code,
+      orderable_status
+    FROM
+      tbl_menu
+    WHERE
+      orderable_status = 'Y'
+    ORDER BY
+      menu_code ASC
+  </select>
+
+
+  <!-- 메뉴 코드가 일치하는 메뉴 조회  -->
+  <!--
+    전달 받은 파라미터의 이름을 #{} 내부에 작성하면
+    해당 위치에 해당 값이 대입된다.
+
+    - 파라미터가 기본 자료형인 경우
+      -> #{} 내부 명칭 관계 없이 무조건 대입됨
+
+    - 파라미터가 객체 타입인 경우
+      -> #{} 내부 명칭을 필드명 또는 key 값과 일치 시켜야 알맞게 대입됨
+  -->
+  <select id="selectMenuByMenuCode" resultMap="menuResultMap"
+          parameterType="_int">
+    SELECT
+      menu_code,
+      menu_name,
+      menu_price,
+      category_code,
+      orderable_status
+    FROM
+      tbl_menu
+    WHERE
+      menu_code = #{menuCode}
+  </select>
+
+
+
+</mapper>
