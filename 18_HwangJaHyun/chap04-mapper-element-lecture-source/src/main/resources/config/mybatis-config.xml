@@ -10,8 +10,12 @@
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
+    <!--
+        지정된 패키지 이하의 모든 클래스를 패키지명 제외한 형태로 별칭 등록
+        ex> MenuDTO
+    -->
     <typeAliases>
-        <typeAlias type="com.my.common.MenuDTO" alias="MenuDTO"/>
+        <package name="com.my"/>
     </typeAliases>
 
     <environments default="development">
@@ -27,7 +31,6 @@
     </environments>
 
     <mappers>
-        <package name="com.my.section01.xml"/>
-        <package name="com.my.section02.provider"/>
+        <package name="com.my"/>
     </mappers>
 </configuration>

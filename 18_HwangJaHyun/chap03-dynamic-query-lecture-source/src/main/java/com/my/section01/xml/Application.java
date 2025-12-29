@@ -179,14 +179,14 @@ public class Application {
     private static Map<String, Object> inputChangeInfo() {
 
         Scanner sc = new Scanner(System.in);
-        System.out.print("변경할 메뉴 코드 입력 : ");
+        System.out.print("변경할 메뉴 코드 입력(필수) : ");
         int menuCode = sc.nextInt();
-        System.out.print("변경할 메뉴 이름 입력 : ");
+        System.out.print("변경할 메뉴 이름 입력(변경X -> enter) : ");
         sc.nextLine();
         String menuName = sc.nextLine();
-        System.out.print("변경할 카테고리 코드 입력 : ");
+        System.out.print("변경할 카테고리 코드 입력(변경X -> 0) : ");
         int categoryCode = sc.nextInt();
-        System.out.print("변경할 판매여부 입력 : ");
+        System.out.print("변경할 판매여부 입력(변경X -> enter) : ");
         sc.nextLine();
         String orderableStatus = sc.nextLine();
 
