@@ -73,5 +73,37 @@
   </select>
 
 
+  <insert id="insertMenu" parameterType="MenuDTO">
+    INSERT INTO tbl_menu(
+      menu_name,
+      menu_price,
+      category_code,
+      orderable_status)
+    VALUES(
+      #{menuName},
+      #{menuPrice},
+      #{categoryCode},
+      'Y'
+    )
+
+  </insert>
+
+
+  <update id="updateMenu" parameterType="MenuDTO">
+    UPDATE tbl_menu
+      SET menu_name = #{ menuName }
+      , menu_price = #{ menuPrice }
+      , category_code = #{ categoryCode }
+    WHERE menu_code = #{ menuCode }
+  </update>
+
+  <!-- parameterType은 optional(선택적) 속성으로
+      작성되지 않으면 Mybatis의 TypeHandler가 알아서 추론함
+   -->
+  <delete id="deleteMenu">
+    DELETE
+    FROM tbl_menu
+    WHERE menu_code = #{ menuCode }
+  </delete>
 
 </mapper>

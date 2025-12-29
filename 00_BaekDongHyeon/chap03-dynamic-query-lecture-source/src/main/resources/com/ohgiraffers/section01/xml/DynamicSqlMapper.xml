@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohgiraffers.section01.xml.DynamicSqlMapper">
+
+  <!-- CDATA 태그
+  - 내부 내용을 해석하지 말고 단순 문자열로 취급하는 태그
+    (내부 <,> 문자를 태그가 아닌 '<' , '>' 글자 그대로 해석)
+  -->
+
+  <!-- if 동적 쿼리 태그를 이용하여 SQL 조합하기   -->
+  <!-- 전달 받은 금액 범위의 모든 메뉴 조회 -->
+  <select id="selectMenuByPrice" resultType="MenuDTO">
+    SELECT
+      menu_code
+      , menu_name
+      , menu_price
+      , category_code
+      , orderable_status
+    FROM
+      tbl_menu
+    WHERE
+      orderable_status = 'Y'
+
+    <if test="price gte 0 and price lt 10000">
+      <![CDATA[
+        AND menu_price < #{price}
+      ]]>
+    </if>
+
+    <if test="price gt 10000 and price lte 20000">
+      AND menu_price BETWEEN 10000 AND #{price}
+    </if>
+
+    <if test="price gt 20000 and price lte 30000">
+      AND menu_price BETWEEN 20000 AND #{price}
+    </if>
+
+    <if test="price gt 30000">
+      AND menu_price BETWEEN 30000 AND #{price}
+    </if>
+
+    ORDER BY menu_code ASC
+  </select>
+
+
+
+  <select id="searchMenu" resultType="MenuDTO"></select>
+
+  <select id="searchMenuBySupCategory" resultType="MenuDTO"></select>
+
+  <select id="searchMenuByRandomMenuCode" resultType="MenuDTO"></select>
+
+  <select id="searchMenuByNameOrCategory" resultType="MenuDTO"></select>
+  
+  <update id="updateMenu"></update>
+  
+  
+</mapper>
