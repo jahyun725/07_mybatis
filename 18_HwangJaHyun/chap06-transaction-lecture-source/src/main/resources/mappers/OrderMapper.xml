@@ -9,7 +9,7 @@
         생성된 PK를 얻어와 사용하겠다는 설정
 
         * KeyProperty="orderCode"
-        얻어온 PK를 대입할 필드를 지정
+        얻어온 PK를 전달받은 파라미터 중 대입할 필드(keyProperty="orderCode")를 지정
     -->
     <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderCode">
         INSERT INTO tbl_order (order_date, order_time, total_order_price)
