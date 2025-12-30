@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.transaction.mapper.OrderMapper">
+
+  <!--
+    * useGeneratedKeys="true"
+     - 생성된 PK를 얻어와 사용하겠다는 설정
+
+    * keyProperty="orderCode"
+     - 얻어온 PK를 대입할 필드를 지정
+  -->
+  <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderCode">
+    INSERT INTO tbl_order (order_date, order_time, total_order_price)
+    VALUES (#{ orderDate }, #{ orderTime }, #{ totalOrderPrice })
+  </insert>
+
+  <insert id="insertOrderMenu">
+    INSERT INTO tbl_order_menu (order_code, menu_code, order_amount)
+    VALUES (#{ orderCode }, #{ menuCode }, #{ orderAmount })
+  </insert>
+</mapper>

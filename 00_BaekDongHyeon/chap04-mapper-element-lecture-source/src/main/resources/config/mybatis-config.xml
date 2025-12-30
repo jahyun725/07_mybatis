@@ -11,7 +11,8 @@
   </settings>
 
   <typeAliases>
-    <typeAlias type="com.ohgiraffers.common.MenuDTO" alias="MenuDTO" />
+    <!-- 지정된 패키지 이하의 모든 클래스를 패기지명 제외한 형태로 별칭 등록 -->
+    <package name="com.ohgiraffers"/>
   </typeAliases>
 
   <environments default="development">
@@ -27,7 +28,6 @@
   </environments>
 
   <mappers>
-    <package name="com.ohgiraffers.section01.xml"/>
-    <package name="com.ohgiraffers.section02.provider"/>
+    <package name="com.ohgiraffers"/>
   </mappers>
 </configuration>

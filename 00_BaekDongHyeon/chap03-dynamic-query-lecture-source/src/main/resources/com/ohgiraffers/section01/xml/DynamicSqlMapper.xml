@@ -14,15 +14,15 @@
   <!-- 전달 받은 금액 범위의 모든 메뉴 조회 -->
   <select id="selectMenuByPrice" resultType="MenuDTO">
     SELECT
-      menu_code
-      , menu_name
-      , menu_price
-      , category_code
-      , orderable_status
+    menu_code
+    , menu_name
+    , menu_price
+    , category_code
+    , orderable_status
     FROM
-      tbl_menu
+    tbl_menu
     WHERE
-      orderable_status = 'Y'
+    orderable_status = 'Y'
 
     <if test="price gte 0 and price lt 10000">
       <![CDATA[
@@ -46,16 +46,152 @@
   </select>
 
 
+  <select id="searchMenu" resultType="MenuDTO">
+    SELECT
+    menu_code
+    , menu_name
+    , menu_price
+    , category_code
+    , orderable_status
+    FROM
+    tbl_menu
+    <if test="condition == 'category'">
+      JOIN tbl_category USING (category_code)
+    </if>
 
-  <select id="searchMenu" resultType="MenuDTO"></select>
+    WHERE orderable_status = 'Y'
 
-  <select id="searchMenuBySupCategory" resultType="MenuDTO"></select>
+    <if test="condition == 'category'">
+      AND category_name LIKE CONCAT('%', #{value}, '%')
+    </if>
 
-  <select id="searchMenuByRandomMenuCode" resultType="MenuDTO"></select>
+    <if test="condition == 'name'">
+      AND menu_name LIKE CONCAT('%', #{value}, '%')
+    </if>
 
-  <select id="searchMenuByNameOrCategory" resultType="MenuDTO"></select>
-  
-  <update id="updateMenu"></update>
-  
-  
+    ORDER BY menu_code ASC
+
+  </select>
+
+
+  <!-- choose, when, otherwise 동적 쿼리 사용
+    == if ~ else if ~ else와 유사한 구문
+  -->
+  <select id="searchMenuBySupCategory" resultType="MenuDTO">
+    SELECT
+    menu_code
+    , menu_name
+    , menu_price
+    , category_code
+    , orderable_status
+    FROM tbl_menu
+    WHERE orderable_status = 'Y'
+    <choose>
+      <when test="value == '식사'">
+        AND category_code IN (4, 5, 6, 7)
+      </when>
+      <when test="value == '음료'">
+        AND category_code IN (8, 9, 10)
+      </when>
+      <otherwise>
+        AND category_code IN (11, 12)
+      </otherwise>
+    </choose>
+    ORDER BY menu_code
+
+  </select>
+
+
+  <!--  foreach 동적 쿼리 사용하기 -->
+  <select id="searchMenuByRandomMenuCode" resultType="MenuDTO">
+    SELECT
+      menu_code
+      , menu_name
+      , menu_price
+      , category_code
+      , orderable_status
+    FROM
+     tbl_menu
+
+    WHERE menu_code IN
+    <foreach
+        collection = "randomMenuCodeList"
+        item = "menuCode"
+        open = "("
+        close= ")"
+        separator=",">
+      #{menuCode}
+    </foreach>
+
+  </select>
+
+
+  <!-- trim 동적 쿼리 사용하기-->
+  <select id="searchMenuByNameOrCategory" resultType="MenuDTO">
+    SELECT
+      menu_code
+      , menu_name
+      , menu_price
+      , category_code
+      , orderable_status
+    FROM
+      tbl_menu
+    <!--
+    문제점 : categoryValue가 없고 nameValue만 있으면 AND로 시작하는 문제 발생
+    <if test="categoryValue != null">
+      WHERE category_code = #{categoryValue}
+    </if>
+
+    <if test="nameValue != null">
+      AND menu_name LIKE CONCAT('%', #{nameValue}, '%')
+    </if>
+    -->
+
+    <!-- 해결 방법 1 : trim 태그 -->
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="categoryValue != null">
+        category_code = #{categoryValue}
+      </if>
+
+      <if test="nameValue != null">
+        AND menu_name LIKE CONCAT('%', #{nameValue}, '%')
+      </if>
+    </trim>
+
+    <!-- 해결 방법 2 : where 태그 -->
+    <!--<where>
+      <if test="categoryValue != null">
+        category_code = #{categoryValue}
+      </if>
+
+      <if test="nameValue != null">
+        AND menu_name LIKE CONCAT('%', #{nameValue}, '%')
+      </if>
+    </where>-->
+
+  </select>
+
+
+  <!-- set 동적 쿼리 사용 하기-->
+  <update id="updateMenu">
+    UPDATE tbl_menu
+    <set>
+      <if test="menuName != null and menuName != ''">
+        menu_name = #{menuName} ,
+      </if>
+
+      <if test="categoryCode != null and categoryCode != 0">
+        category_code = #{categoryCode} ,
+      </if>
+
+      <if test="orderableStatus != null and orderableStatus != ''">
+        orderable_status = #{orderableStatus}
+      </if>
+    </set>
+
+    WHERE menu_code = #{menuCode}
+
+  </update>
+
+
 </mapper>
